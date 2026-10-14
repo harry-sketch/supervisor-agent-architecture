@@ -3,7 +3,7 @@ import { model } from "../llm/openAi.model.ts";
 import { SUPERVISOR_PROMPT } from "../prompts/index.ts";
 import { supervisorTools } from "../tools/index.ts";
 
-export const supervisorAgnt = createAgent({
+export const supervisorAgent = createAgent({
   model: model,
   tools: supervisorTools,
   systemPrompt: SUPERVISOR_PROMPT,
