@@ -3,6 +3,7 @@ import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
 import { HumanMessage } from "langchain";
 import { supervisorAgent } from "./src/agents/supervisor.agent";
+import { config } from "./src/config/index.ts";
 
 const main = async () => {
   const rl = createInterface({
@@ -18,9 +19,12 @@ const main = async () => {
         break;
       }
 
-      const resp = await supervisorAgent.invoke({
-        messages: new HumanMessage(question),
-      });
+      const resp = await supervisorAgent.invoke(
+        {
+          messages: new HumanMessage(question),
+        },
+        config,
+      );
 
       console.log(`Assistant: ${resp.messages.at(-1)?.content}`);
     }
