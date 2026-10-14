@@ -5,4 +5,7 @@ export const model = new ChatOpenAI({
   apiKey: process.env.OPEN_AI_API_KEY,
   maxRetries: 6,
   maxTokens: 600,
+  reasoning: {
+    effort: "none",
+  },
 });
