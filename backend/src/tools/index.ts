@@ -4,7 +4,7 @@ import { calendarAgent } from "../agents/sub-agents/calendar.agent.ts";
 import { contactAgent } from "../agents/sub-agents/contact.agent.ts";
 import { emailAgent } from "../agents/sub-agents/email.agent.ts";
 
-export const calendarAgentTool = tool(
+const calendarAgentTool = tool(
   async ({ request }) => {
     try {
       const resp = await calendarAgent.invoke({
@@ -33,7 +33,7 @@ export const calendarAgentTool = tool(
   },
 );
 
-export const emailAgentTool = tool(
+const emailAgentTool = tool(
   async ({ request }) => {
     try {
       const resp = await emailAgent.invoke({
@@ -60,7 +60,7 @@ export const emailAgentTool = tool(
   },
 );
 
-export const contactAgentTool = tool(
+const contactAgentTool = tool(
   async ({ request }) => {
     try {
       const resp = await contactAgent.invoke({
@@ -87,3 +87,9 @@ export const contactAgentTool = tool(
     }),
   },
 );
+
+export const supervisorTools = [
+  contactAgentTool,
+  emailAgentTool,
+  calendarAgentTool,
+];
