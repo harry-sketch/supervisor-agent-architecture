@@ -19,6 +19,8 @@ const main = async () => {
         break;
       }
 
+      console.log("🤔 Thinking....");
+
       const resp = await supervisorAgent.invoke(
         {
           messages: new HumanMessage(question),
@@ -29,16 +31,6 @@ const main = async () => {
       const aiMsg = resp.messages.at(-1)?.content;
 
       console.log(`Assistant: ${aiMsg}`);
-
-      // for await (const stream of streams) {
-      //   for (const update of Object.values(stream)) {
-      //     if (update && typeof update === "object" && "messages" in update) {
-      //       for (const msg of update.messages) {
-      //         console.log(`Assistant: ${msg.toFormattedString()}`);
-      //       }
-      //     }
-      //   }
-      // }
     }
   } catch (error) {
     console.log("Somehing went wrong~~~", error);
