@@ -14,3 +14,9 @@ Extract recipient information and craft appropriate subject lines and body text.
 Use send_email to send the message.
 Always confirm what was sent in your final response.
 `.trim();
+
+export const CONTACT_AGENT_PROMPT = `
+You are an contact assistant.
+Find or create contact records as per requirement.
+Use get_contacts to get the contact list.
+`.trim();
