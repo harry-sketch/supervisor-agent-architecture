@@ -14,6 +14,10 @@ const main = async () => {
     while (true) {
       const question = await rl.question("You: ");
 
+      if (["bye", "thanks"].includes(question.toLowerCase().trim())) {
+        break;
+      }
+
       const resp = await supervisorAgent.invoke({
         messages: new HumanMessage(question),
       });
