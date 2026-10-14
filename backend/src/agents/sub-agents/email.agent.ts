@@ -1,7 +1,7 @@
 import { createAgent } from "langchain";
-import { model } from "../llm/openAi.model";
-import { EMAIL_AGENT_PROMPT } from "../prompts/index.ts";
-import { emailTools } from "../tools/email.tool.ts";
+import { model } from "../../llm/openAi.model.ts";
+import { EMAIL_AGENT_PROMPT } from "../../prompts/index.ts";
+import { emailTools } from "../../tools/email.tool.ts";
 
 export const emailAgent = createAgent({
   model,
