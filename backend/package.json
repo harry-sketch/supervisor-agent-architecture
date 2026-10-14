@@ -1,0 +1,16 @@
+{
+  "name": ".",
+  "module": "main.ts",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "@types/node": "^26.6.5",
+    "dotenv": "^18.0.7",
+    "zod": "^4.6.7"
+  }
+}
