@@ -4,6 +4,7 @@ export type TResponseType = Awaited<ReturnType<typeof supervisorAgent.invoke>>;
 
 export interface IInterrupt {
   actionRequests: {
+    name: string;
     description: string;
   }[];
   reviewConfigs: {

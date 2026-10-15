@@ -22,7 +22,7 @@ const main = async () => {
       const answer = question.toLowerCase().trim();
 
       if (
-        ["bye", "thanks", "okay", "thenks"].includes(
+        ["bye", "thanks", "okay", "thenks", "gg"].includes(
           question.toLowerCase().trim(),
         )
       ) {
@@ -35,18 +35,41 @@ const main = async () => {
 
       const resume: Record<
         string,
-        { decisions: [{ type: "approve" | "reject" | "edit" }] }
+        {
+          decisions: [
+            {
+              type: "approve" | "reject" | "edit";
+              editedAction?: {
+                name: string;
+                description: string;
+              };
+            },
+          ];
+        }
       > = {};
 
       if (interruptsArr.length > 0) {
         const interrupt = interruptsArr[0];
-        resume[interrupt?.id ?? ""] = {
-          decisions: [
-            {
-              type: approveType ? "approve" : editType ? "edit" : "reject",
-            },
-          ],
-        };
+
+        if (editType) {
+          const val = interrupt?.value as IInterrupt;
+
+          const actionReq = val.actionRequests[0];
+
+          if (actionReq?.name === "send_email") {
+            const editedAction = { ...actionReq };
+
+            editedAction.description = question;
+
+            resume[interrupt?.id ?? ""] = {
+              decisions: [{ type: "edit", editedAction }],
+            };
+          }
+        } else {
+          resume[interrupt?.id ?? ""] = {
+            decisions: [{ type: approveType ? "approve" : "reject" }],
+          };
+        }
       }
 
       console.log("🤔 Thinking....");
@@ -67,6 +90,8 @@ const main = async () => {
 
         const value = resp.__interrupt__[0]?.value as IInterrupt;
 
+        const name = value.actionRequests.map(({ name }) => name);
+
         const description = value.actionRequests.map(
           ({ description }) => description,
         );
@@ -77,6 +102,9 @@ const main = async () => {
           .map((val, id) => `${id + 1}: ${val}`)
           .join("\n");
 
+        console.log("\n");
+        console.log(name[0]?.replace("/\\n/g", "\n"));
+        console.log("\n");
         console.log(description[0]?.replace("/\\n/g", "\n"));
         console.log("\n");
         console.log(`Choose an option \n`);
