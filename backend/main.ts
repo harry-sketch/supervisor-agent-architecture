@@ -61,6 +61,8 @@ const main = async () => {
 
             editedAction.description = question;
 
+            editedAction.name = "edit_email";
+
             resume[interrupt?.id ?? ""] = {
               decisions: [{ type: "edit", editedAction }],
             };
