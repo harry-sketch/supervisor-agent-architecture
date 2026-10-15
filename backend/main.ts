@@ -22,12 +22,14 @@ const main = async () => {
 
       console.log("🤔 Thinking....");
 
-      const resp: TResponseType = await supervisorAgent.invoke(
-        {
-          messages: new HumanMessage(question),
-        },
+      let resp: TResponseType | undefined;
+
+      resp = await supervisorAgent.invoke(
+        { messages: new HumanMessage(question) },
         config,
       );
+
+      if (!resp) return;
 
       if (resp.__interrupt__) {
         const value = resp.__interrupt__[0]?.value as IInterrupt;
@@ -45,6 +47,7 @@ const main = async () => {
         console.log(description[0]?.replace("/\\n/g", "\n"));
         console.log("\n");
         console.log(actions);
+        console.log("\n");
       } else {
         const aiMsg = resp.messages.at(-1)?.content;
         console.log(`Assistant: ${aiMsg}`);
