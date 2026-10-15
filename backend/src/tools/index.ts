@@ -6,17 +6,13 @@ import { emailAgent } from "../agents/sub-agents/email.agent.ts";
 
 const calendarAgentTool = tool(
   async ({ request }) => {
-    try {
-      const resp = await calendarAgent.invoke({
-        messages: [new HumanMessage(request)],
-      });
+    const resp = await calendarAgent.invoke({
+      messages: [new HumanMessage(request)],
+    });
 
-      const lastMsg = resp.messages[resp.messages.length - 1]?.text;
+    const lastMsg = resp.messages[resp.messages.length - 1]?.text;
 
-      return lastMsg;
-    } catch (error) {
-      console.log("Something went wrong", error);
-    }
+    return lastMsg;
   },
   {
     name: "manage_calendar_events",
@@ -35,17 +31,13 @@ const calendarAgentTool = tool(
 
 const emailAgentTool = tool(
   async ({ request }) => {
-    try {
-      const resp = await emailAgent.invoke({
-        messages: new HumanMessage(request),
-      });
+    const resp = await emailAgent.invoke({
+      messages: new HumanMessage(request),
+    });
 
-      const lastMsg = resp.messages.at(-1)?.text;
+    const lastMsg = resp.messages.at(-1)?.text;
 
-      return lastMsg;
-    } catch (error) {
-      console.log("Something went wrong", error);
-    }
+    return lastMsg;
   },
   {
     name: "manage_email",
@@ -62,17 +54,13 @@ const emailAgentTool = tool(
 
 const contactAgentTool = tool(
   async ({ request }) => {
-    try {
-      const resp = await contactAgent.invoke({
-        messages: new HumanMessage(request),
-      });
+    const resp = await contactAgent.invoke({
+      messages: new HumanMessage(request),
+    });
 
-      const lastMsg = resp.messages.at(-1)?.text;
+    const lastMsg = resp.messages.at(-1)?.text;
 
-      return lastMsg;
-    } catch (error) {
-      console.log("Something went wrong", error);
-    }
+    return lastMsg;
   },
   {
     name: "manage_contacts",

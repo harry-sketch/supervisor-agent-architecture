@@ -28,9 +28,7 @@ const main = async () => {
         config,
       );
 
-      const aiMsg = resp.messages.at(-1)?.content;
-
-      console.log(`Assistant: ${aiMsg}`);
+      console.log(resp);
     }
   } catch (error) {
     console.log("Somehing went wrong~~~", error);
