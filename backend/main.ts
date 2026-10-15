@@ -1,6 +1,7 @@
 import "dotenv/config";
 import { stdin, stdout } from "node:process";
 import { createInterface } from "node:readline/promises";
+import { Command } from "@langchain/langgraph";
 import { HumanMessage } from "langchain";
 import { supervisorAgent } from "./src/agents/supervisor.agent";
 import { config } from "./src/config/index.ts";
@@ -12,26 +13,58 @@ const main = async () => {
     output: stdout,
   });
 
+  let interruptsArr = [];
+
   try {
     while (true) {
       const question = await rl.question("You: ");
 
-      if (["bye", "thanks"].includes(question.toLowerCase().trim())) {
+      const answer = question.toLowerCase().trim();
+
+      if (
+        ["bye", "thanks", "okay", "thenks"].includes(
+          question.toLowerCase().trim(),
+        )
+      ) {
         break;
+      }
+
+      const approveType = answer === "1" || answer === "yes";
+
+      const editType = answer === "2" || answer === "edit";
+
+      const resume: Record<
+        string,
+        { decisions: [{ type: "approve" | "reject" | "edit" }] }
+      > = {};
+
+      if (interruptsArr.length > 0) {
+        const interrupt = interruptsArr[0];
+        resume[interrupt?.id ?? ""] = {
+          decisions: [
+            {
+              type: approveType ? "approve" : editType ? "edit" : "reject",
+            },
+          ],
+        };
       }
 
       console.log("🤔 Thinking....");
 
-      let resp: TResponseType | undefined;
-
-      resp = await supervisorAgent.invoke(
-        { messages: new HumanMessage(question) },
+      const resp: TResponseType = await supervisorAgent.invoke(
+        interruptsArr.length > 0
+          ? new Command({
+              resume,
+            })
+          : { messages: new HumanMessage(question) },
         config,
       );
 
-      if (!resp) return;
+      interruptsArr = [];
 
       if (resp.__interrupt__) {
+        interruptsArr.push(resp.__interrupt__[0]);
+
         const value = resp.__interrupt__[0]?.value as IInterrupt;
 
         const description = value.actionRequests.map(
@@ -46,6 +79,7 @@ const main = async () => {
 
         console.log(description[0]?.replace("/\\n/g", "\n"));
         console.log("\n");
+        console.log(`Choose an option \n`);
         console.log(actions);
         console.log("\n");
       } else {
