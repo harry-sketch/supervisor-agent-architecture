@@ -32,7 +32,19 @@ const main = async () => {
       if (resp.__interrupt__) {
         const value = resp.__interrupt__[0]?.value as IInterrupt;
 
-        console.log(value);
+        const description = value.actionRequests.map(
+          ({ description }) => description,
+        );
+
+        const actionsType = value.reviewConfigs[0]?.allowedDecisions ?? [];
+
+        const actions = actionsType
+          .map((val, id) => `${id + 1}: ${val}`)
+          .join("\n");
+
+        console.log(description[0]?.replace("/\\n/g", "\n"));
+        console.log("\n");
+        console.log(actions);
       } else {
         const aiMsg = resp.messages.at(-1)?.content;
         console.log(`Assistant: ${aiMsg}`);
